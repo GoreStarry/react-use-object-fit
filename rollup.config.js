@@ -14,7 +14,7 @@ const packageJson = require("./package.json");
 
 const defaultSettings = {
   plugins: [
-    // peerDepsExternal(),
+    peerDepsExternal(),
     replace({
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
