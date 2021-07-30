@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import useObjectFit from "./useObjectFit";
 import ImageUploading from "react-images-uploading";
 
-function App() {
+function App({ type, containerWidth: boxWidth, containerHeight: boxHeight }) {
   const [images, setImages] = useState([]);
   const {
     width,
@@ -15,9 +15,9 @@ function App() {
     containerWidth,
     containerHeight,
   } = useObjectFit({
-    type: "cover",
+    type,
     imgUrl: images[0]?.data_url,
-    container: { width: 60, height: 100 },
+    container: { width: boxWidth, height: boxHeight },
   });
 
   const onChangeCoverImg = useCallback((imageList, addUpdateIndex) => {
@@ -26,8 +26,8 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      {`${width}, ${height}, ${ratio}, ${offsetX}, ${offsetY}, ${imgWidth} ,${imgHeight}, ${containerWidth}, ${containerHeight}`}
+    <div className="App" style={{ whiteSpace: "pre-wrap" }}>
+      {`object-fit width: ${width}\nobject-fit height: ${height}\nimage ratio: ${ratio}\noffsetX: ${offsetX}\noffsetY: ${offsetY}\norigin image width: ${imgWidth} \norigin image height: ${imgHeight}\ncontainer width: ${containerWidth}\ncontainer height: ${containerHeight}`}
 
       <ImageUploading
         // multiple
@@ -75,12 +75,28 @@ function App() {
                 )}
               </div>
             )}
-            {imageList[0] && (
-              <button onClick={onImageRemoveAll}>Remove all images</button>
-            )}
+
             {imageList.map((image, index) => (
               <div key={index} className="image-item">
-                <img src={image.data_url} alt="" width="100" />
+                <label htmlFor="">Container：</label>
+                <div
+                  style={{
+                    width: boxWidth,
+                    height: boxHeight,
+                    overflow: "hidden",
+                    border: "3px dashed green",
+                    margin: "1rem",
+                  }}
+                >
+                  <img
+                    src={image.data_url}
+                    style={{
+                      width: width,
+                      height: height,
+                      transform: `translate(${offsetX}px, ${offsetY}px)`,
+                    }}
+                  />
+                </div>
                 <div className="image-item__btn-wrapper">
                   <button onClick={() => onImageUpdate(index)}>Update</button>
                   <button onClick={() => onImageRemove(index)}>Remove</button>

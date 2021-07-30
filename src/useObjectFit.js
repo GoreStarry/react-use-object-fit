@@ -42,8 +42,8 @@ const useObjectFit = ({
 
   useEffect(() => {
     const targetContainer = ref?.current || dom;
-    const targetWidth = containerWidth || targetContainer.clientWidth;
-    const targetHeight = containerHeight || targetContainer.clientHeight;
+    const targetWidth = containerWidth || targetContainer?.clientWidth;
+    const targetHeight = containerHeight || targetContainer?.clientHeight;
     const targetRatio = targetWidth / targetHeight;
 
     if (!imgUrl) return;
@@ -73,7 +73,8 @@ const useObjectFit = ({
         if (ratio >= targetRatio) {
           const scale = containerWidth / naturalWidth;
           width = containerWidth;
-          height = naturalWidth * scale;
+          height = naturalHeight * scale;
+
           offsetY = (containerHeight - height) / 2;
         } else {
           const scale = containerHeight / naturalHeight;
@@ -96,7 +97,7 @@ const useObjectFit = ({
       });
     });
     img.src = imgUrl;
-  }, [imgUrl, ref, dom, containerWidth, containerHeight]);
+  }, [type, imgUrl, ref, dom, containerWidth, containerHeight]);
 
   return size;
 };

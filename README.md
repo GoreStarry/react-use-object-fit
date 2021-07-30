@@ -2,6 +2,8 @@
 
 Get scale size and offset by custom hook, mainly used for canvas evn.
 
+[Storybook](https://gorestarry.github.io/react-use-object-fit/storybook)
+
 ## Install
 
 ### npm
@@ -23,7 +25,7 @@ yarn add GoreStarry/react-use-object-fit
  * @param {object} {
  *   type, // "cover", "contain"
  *   imgUrl,
- *   container: {
+ *   container: {****
  *      ref, // get container size by React ref
  *      dom, // get container size by Dom elm
  *      width, // directly give container size
@@ -81,8 +83,6 @@ export default function App() {
 }
 
 ```
-
-[Storybook](https://gorestarry.github.io/react-use-object-fit/storybook)
 
 ## License
 
