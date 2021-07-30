@@ -1,6 +1,6 @@
 # react-use-object-fit
 
-Get scale size and offset by custom hook, mainly used for canvas evn.
+Get scale size and offset by custom hook, mainly used for draw canvas.
 
 [Storybook](https://gorestarry.github.io/react-use-object-fit/storybook)
 
@@ -74,8 +74,8 @@ export default function App() {
   return (
      <Sprite
         image={url}
-        width={imgWidth}
-        height={imgHeight}
+        width={width}
+        height={height}
         x={offsetX}
         y={offsetY}
       />
