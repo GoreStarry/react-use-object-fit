@@ -42,15 +42,17 @@ const useObjectFit = ({
 
   useEffect(() => {
     const targetContainer = ref?.current || dom;
+
     const targetWidth = containerWidth || targetContainer?.clientWidth;
     const targetHeight = containerHeight || targetContainer?.clientHeight;
+
     const targetRatio = targetWidth / targetHeight;
 
     if (!imgUrl) return;
     const img = document.createElement("img");
     img.addEventListener("load", (e) => {
       const { naturalHeight, naturalWidth } = e.target;
-      console.log(naturalWidth, naturalHeight);
+
       const ratio = naturalWidth / naturalHeight;
       let width,
         height,
@@ -59,28 +61,29 @@ const useObjectFit = ({
 
       if (type === "cover") {
         if (ratio >= targetRatio) {
-          const scale = containerHeight / naturalHeight;
+          const scale = targetHeight / naturalHeight;
+
           width = naturalWidth * scale;
-          offsetX = (containerWidth - width) / 2;
-          height = containerHeight;
+          offsetX = (targetWidth - width) / 2;
+          height = targetHeight;
         } else {
-          const scale = containerWidth / naturalWidth;
-          width = containerWidth;
+          const scale = targetWidth / naturalWidth;
+          width = targetWidth;
           height = naturalHeight * scale;
-          offsetY = (containerHeight - height) / 2;
+          offsetY = (targetHeight - height) / 2;
         }
       } else if (type === "contain") {
         if (ratio >= targetRatio) {
-          const scale = containerWidth / naturalWidth;
-          width = containerWidth;
+          const scale = targetWidth / naturalWidth;
+          width = targetWidth;
           height = naturalHeight * scale;
 
-          offsetY = (containerHeight - height) / 2;
+          offsetY = (targetHeight - height) / 2;
         } else {
-          const scale = containerHeight / naturalHeight;
-          height = containerHeight;
+          const scale = targetHeight / naturalHeight;
+          height = targetHeight;
           width = naturalWidth * scale;
-          offsetX = (containerWidth - width) / 2;
+          offsetX = (targetWidth - width) / 2;
         }
       }
 
@@ -92,8 +95,8 @@ const useObjectFit = ({
         offsetY,
         imgWidth: naturalWidth,
         imgHeight: naturalHeight,
-        containerWidth,
-        containerHeight,
+        containerWidth: targetWidth,
+        containerHeight: targetHeight,
       });
     });
     img.src = imgUrl;

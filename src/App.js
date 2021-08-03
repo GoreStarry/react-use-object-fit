@@ -4,6 +4,7 @@ import ImageUploading from "react-images-uploading";
 
 function App({ type, containerWidth: boxWidth, containerHeight: boxHeight }) {
   const [images, setImages] = useState([]);
+  const refContainer = useRef();
   const {
     width,
     height,
@@ -17,7 +18,11 @@ function App({ type, containerWidth: boxWidth, containerHeight: boxHeight }) {
   } = useObjectFit({
     type,
     imgUrl: images[0]?.data_url,
-    container: { width: boxWidth, height: boxHeight },
+    container: {
+      width: boxWidth,
+      height: boxHeight,
+      // ref: refContainer,
+    },
   });
 
   const onChangeCoverImg = useCallback((imageList, addUpdateIndex) => {
@@ -80,6 +85,7 @@ function App({ type, containerWidth: boxWidth, containerHeight: boxHeight }) {
               <div key={index} className="image-item">
                 <label htmlFor="">Container：</label>
                 <div
+                  ref={refContainer}
                   style={{
                     width: boxWidth,
                     height: boxHeight,
