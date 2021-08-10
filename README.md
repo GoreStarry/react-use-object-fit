@@ -37,9 +37,9 @@ yarn add GoreStarry/react-use-object-fit
  *    height, // object fit hight
  *    offsetX, // object fit offsetX
  *    offsetY, // object fit offsetY
- *    ratio, // origin image ratio
  *    imgWidth,
  *    imgHeight,
+ *    imgRatio,
  *    containerWidth,
  *    containerHeight,
  * }
@@ -58,11 +58,11 @@ export default function App() {
   const {
     width,
     height,
-    ratio,
     offsetX,
     offsetY,
     imgWidth,
     imgHeight,
+    imgRatio,
     containerWidth,
     containerHeight,
   } = useObjectFit({
