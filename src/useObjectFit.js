@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 /**
  * @param {object} {
@@ -16,9 +16,9 @@ import { useState, useEffect } from "react";
  *    height, // object fit hight
  *    offsetX, // object fit offsetX
  *    offsetY, // object fit offsetY
- *    ratio, // origin image ratio
  *    imgWidth,
  *    imgHeight,
+ *    imgRatio, // origin image imgRatio
  *    containerWidth,
  *    containerHeight,
  * }
@@ -31,76 +31,107 @@ const useObjectFit = ({
   const [size, setSize] = useState({
     width: 0,
     height: 0,
-    ratio: 0,
     offsetX: 0,
     offsetY: 0,
     imgWidth: 0,
     imgHeight: 0,
+    imgRatio: 0,
     containerWidth: 0,
     containerHeight: 0,
   });
 
-  useEffect(() => {
+  const refResizeGetCallback = useRef();
+  const refIsImgLoad = useRef();
+  const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
+
+  const get = useCallback(() => {
     const targetContainer = ref?.current || dom;
 
     const targetWidth = containerWidth || targetContainer?.clientWidth;
     const targetHeight = containerHeight || targetContainer?.clientHeight;
-
     const targetRatio = targetWidth / targetHeight;
 
-    if (!imgUrl) return;
-    const img = document.createElement("img");
-    img.addEventListener("load", (e) => {
-      const { naturalHeight, naturalWidth } = e.target;
+    const { width: imgWidth, height: imgHeight } = imgSize;
 
-      const ratio = naturalWidth / naturalHeight;
-      let width,
-        height,
-        offsetX = 0,
-        offsetY = 0;
+    const imgRatio = imgWidth / imgHeight;
 
-      if (type === "cover") {
-        if (ratio >= targetRatio) {
-          const scale = targetHeight / naturalHeight;
+    let width,
+      height,
+      offsetX = 0,
+      offsetY = 0;
 
-          width = naturalWidth * scale;
-          offsetX = (targetWidth - width) / 2;
-          height = targetHeight;
-        } else {
-          const scale = targetWidth / naturalWidth;
-          width = targetWidth;
-          height = naturalHeight * scale;
-          offsetY = (targetHeight - height) / 2;
-        }
-      } else if (type === "contain") {
-        if (ratio >= targetRatio) {
-          const scale = targetWidth / naturalWidth;
-          width = targetWidth;
-          height = naturalHeight * scale;
+    if (type === "cover") {
+      if (imgRatio >= targetRatio) {
+        const scale = targetHeight / imgHeight;
 
-          offsetY = (targetHeight - height) / 2;
-        } else {
-          const scale = targetHeight / naturalHeight;
-          height = targetHeight;
-          width = naturalWidth * scale;
-          offsetX = (targetWidth - width) / 2;
-        }
+        width = imgWidth * scale;
+        offsetX = (targetWidth - width) / 2;
+        height = targetHeight;
+      } else {
+        const scale = targetWidth / imgWidth;
+        width = targetWidth;
+        height = imgHeight * scale;
+        offsetY = (targetHeight - height) / 2;
       }
+    } else if (type === "contain") {
+      if (imgRatio >= targetRatio) {
+        const scale = targetWidth / imgWidth;
+        width = targetWidth;
+        height = imgHeight * scale;
 
-      setSize({
-        width,
-        height,
-        ratio,
-        offsetX,
-        offsetY,
-        imgWidth: naturalWidth,
-        imgHeight: naturalHeight,
-        containerWidth: targetWidth,
-        containerHeight: targetHeight,
-      });
+        offsetY = (targetHeight - height) / 2;
+      } else {
+        const scale = targetHeight / imgHeight;
+        height = targetHeight;
+        width = imgWidth * scale;
+        offsetX = (targetWidth - width) / 2;
+      }
+    }
+
+    setSize({
+      width,
+      height,
+      imgRatio,
+      offsetX,
+      offsetY,
+      imgWidth,
+      imgHeight,
+      containerWidth: targetWidth,
+      containerHeight: targetHeight,
+    });
+  }, [type, ref, dom, containerWidth, containerHeight, imgSize]);
+
+  useEffect(() => {
+    if (!refIsImgLoad.current) return;
+
+    get();
+
+    const targetContainer = ref?.current || dom;
+    if (refResizeGetCallback.current) {
+      window.removeEventListener("resize", refResizeGetCallback.current);
+    }
+
+    if (window && targetContainer) {
+      window.addEventListener("resize", get);
+    }
+    refResizeGetCallback.current = get;
+    return () => {
+      window.removeEventListener("resize", refResizeGetCallback.current);
+    };
+  }, [get]);
+
+  useEffect(() => {
+    if (!imgUrl) return;
+    refIsImgLoad.current = false;
+    const img = document.createElement("img");
+
+    img.addEventListener("load", (e) => {
+      refIsImgLoad.current = true;
+      const { naturalWidth, naturalHeight } = e.target;
+      setImgSize({ width: naturalWidth, height: naturalHeight });
     });
     img.src = imgUrl;
-  }, [type, imgUrl, ref, dom, containerWidth, containerHeight]);
+  }, [imgUrl]);
 
   return size;
 };

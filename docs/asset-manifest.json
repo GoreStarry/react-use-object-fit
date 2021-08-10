@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/GoreStarry/react-use-object-fit/static/js/main.526af9c8.chunk.js",
-    "main.js.map": "/GoreStarry/react-use-object-fit/static/js/main.526af9c8.chunk.js.map",
+    "main.js": "/GoreStarry/react-use-object-fit/static/js/main.367dc332.chunk.js",
+    "main.js.map": "/GoreStarry/react-use-object-fit/static/js/main.367dc332.chunk.js.map",
     "runtime-main.js": "/GoreStarry/react-use-object-fit/static/js/runtime-main.d07c4eb7.js",
     "runtime-main.js.map": "/GoreStarry/react-use-object-fit/static/js/runtime-main.d07c4eb7.js.map",
     "static/js/2.4a2ec605.chunk.js": "/GoreStarry/react-use-object-fit/static/js/2.4a2ec605.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.d07c4eb7.js",
     "static/js/2.4a2ec605.chunk.js",
-    "static/js/main.526af9c8.chunk.js"
+    "static/js/main.367dc332.chunk.js"
   ]
 }
