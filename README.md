@@ -1,6 +1,6 @@
 # react-use-object-fit
 
-Get scale size and offset by custom hook, mainly used for draw canvas.
+Get scale size and offset by custom hook, mainly used for draw canvas, or you need the border style so you can't easily use CSS object-fit.
 
 [Storybook](https://gorestarry.github.io/react-use-object-fit/storybook)
 
